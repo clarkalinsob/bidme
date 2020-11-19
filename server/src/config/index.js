@@ -9,9 +9,9 @@ module.exports = {
   LOG_LEVEL: process.env.LOG_LEVEL || 'info',
   development: {
     host: process.env.DB_HOST || 'localhost',
-    username: process.env.DB_USER || 'pguser',
-    password: process.env.DB_PASS || 'password',
-    database: process.env.DB_NAME || 'pg_dev',
+    username: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASS || 'root',
+    database: process.env.DB_NAME || 'bidme_dev',
     dialect: 'postgres',
     port: parseInt(process.env.DB_PORT, 10) || 5432,
     max_connection: parseInt(process.env.DB_MAX_CONNECTION, 10) || 20,

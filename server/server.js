@@ -5,4 +5,4 @@ process.on('uncaughtException', error => {
   console.log(error);
 });
 
-app.listen(PORT, () => console.log(`App running on PORT ${PORT}`));
+app.listen(PORT, () => console.log('Successfully served API on PORT:', PORT));
