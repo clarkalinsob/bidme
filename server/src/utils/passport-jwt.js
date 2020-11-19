@@ -11,13 +11,12 @@ module.exports = () => async (req, res, next) => {
     if (!payload) {
       throw new Error('ERROR_INVALID_TOKEN', 401);
     }
-    const username = payload['cognito:username'] || payload.username;
-    if (!username) {
+    const email = payload['cognito:email'] || payload.email;
+    if (!email) {
       throw new Error('ERROR_INVALID_TOKEN', 401);
     }
     req.user = {
-      id: username,
-      role: payload['custom:role'] || 'USER',
+      email,
       token
     };
 

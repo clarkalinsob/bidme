@@ -1,8 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="product">
-  <select id="get">
-    SELECT *
-    FROM bidme.m_product
+  <select id="list">
+    SELECT
+      pd.id,
+      pd.name AS product_name,
+      pf.name AS seller_name,
+      pf.email AS seller_email,
+      pd.image_url,
+      pd.valid_from,
+      pd.valid_to
+    FROM bidme.m_product pd
+    INNER JOIN bidme.t_profile pf ON pd.created_by = pf.email
+    WHERE 
+      pd.deleted_at IS NULL
+    ORDER BY id <choose><when test="order == 'asc'">ASC</when><otherwise>DESC</otherwise></choose>
+    <if test="limit != null">
+      LIMIT #{limit}
+    </if>
   </select>
+
+  <select id="get">
+    SELECT
+      pd.id,
+      pd.name AS product_name,
+      pf.name AS seller_name,
+      pf.email AS seller_email,
+      pd.image_url,
+      pd.valid_from,
+      pd.valid_to
+    FROM 
+      bidme.m_product pd
+    INNER JOIN 
+      bidme.t_profile pf ON pd.created_by = pf.email
+    WHERE 
+      pd.id = #{id} AND
+      pd.deleted_at IS NULL
+  </select>
+
+  <insert id="insert">
+    INSERT INTO bidme.m_product(
+      name, 
+      description,
+      created_by,
+      image_url,
+      valid_from,
+      valid_to
+    ) VALUES (
+      #{name},
+      #{description},
+      #{created_by},
+      #{image_url},
+      #{valid_from},
+      #{valid_to}
+    )
+    RETURNING id
+  </insert>
+
+  <update id="update">
+    UPDATE bidme.m_product SET
+      name = #{name},
+      description = #{description},
+      image_url = #{image_url},
+      valid_from = #{valid_from},
+      valid_to = #{valid_to},
+      updated_at = now()
+    WHERE
+      id = #{id}
+  </update>
+
+  <update id = "delete">
+      UPDATE bidme.m_product 
+      SET 
+        deleted_at = #{deleted_at} 
+      WHERE 
+        id = #{id} AND 
+        deleted_at IS NULL;
+  </update>
 </mapper>
